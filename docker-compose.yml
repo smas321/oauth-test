@@ -77,3 +77,21 @@ services:
     networks:
       - monitoring_network
     restart: unless-stopped
+
+  iframe-app:
+    image: ghcr.io/smas321/grafana-iframe-oauth-sample:latest
+    container_name: iframe-app
+    ports:
+      - "4200:4200"
+    depends_on:
+      - grafana
+      - oauthkeycloak
+      - oauthproxy
+    environment:
+      - REACT_APP_KEYCLOAK_URL=http://env.grafana.local:8087
+      - REACT_APP_GRAFANA_URL=http://env.grafana.local:8088
+    extra_hosts:
+      - "env.grafana.local:host-gateway"
+    networks:
+      - monitoring_network
+    restart: unless-stopped
